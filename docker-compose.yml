@@ -1,0 +1,10 @@
+services:
+
+  clamav:
+    image: clamav/clamav
+    container_name: clamav
+    volumes:
+      - ./clamav/data:/var/lib/clamav
+      - ./clamav/socket:/tmp/
+    ports:
+      - "3310:3310"

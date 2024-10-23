@@ -1,0 +1,24 @@
+{
+    "name": "adriengras/php-clamav",
+    "description": "A PHP/Composer package to use ClamAV to scan folders and files for viruses",
+    "type": "library",
+    "require": {
+        "ext-sockets": "*",
+        "php": "^8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": ">=9"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "AdrienGras\\PhpClamAV\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Adrien Gras",
+            "email": "agr@owlnext.fr"
+        }
+    ]
+}
