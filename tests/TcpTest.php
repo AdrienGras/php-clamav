@@ -14,5 +14,6 @@ class TcpTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         self::$clamAV = ClamAV::fromDSN('tcp://localhost:3310');
+        self::$clamAV = ClamAV::fromParts('localhost', '3310');
     }
 }

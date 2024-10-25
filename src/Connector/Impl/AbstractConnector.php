@@ -10,7 +10,7 @@ abstract class AbstractConnector implements ConnectorInterface
 
     protected const MAX_RECV_BUFFER_SIZE = 20000;
 
-    public function sendSimpleCommand(string $command): string
+    public function sendRecv(string $command): string
     {
         $socket = $this->getSocket();
 

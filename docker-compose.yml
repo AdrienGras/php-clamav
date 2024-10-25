@@ -6,5 +6,6 @@ services:
     volumes:
       - ./clamav/data:/var/lib/clamav
       - ./clamav/socket:/tmp/
+      - ./clamav/files:/var/www
     ports:
       - "3310:3310"
