@@ -14,11 +14,13 @@ class SocketConnector extends AbstractConnector
 
     public function __construct(string $dsn = self::DEFAULT_CLAMAV_UNIX_SOCKET_DSN)
     {
-        if (false === filter_var($dsn, FILTER_VALIDATE_URL)) {
+        $patchedDSN = str_replace(':///', '://', $dsn);
+
+        if (false === filter_var($patchedDSN, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException(sprintf("Invalid DSN provided: %s", $dsn));
         }
 
-        $parts = parse_url($dsn);
+        $parts = parse_url($patchedDSN);
         $scheme = $parts["scheme"];
 
         if ("unix" !== $scheme) {
@@ -32,7 +34,7 @@ class SocketConnector extends AbstractConnector
 
     public function getSocket(): \Socket
     {
-        $path = substr($this->dsn, strlen("unix:/"));
+        $path = substr($this->dsn, strlen("unix://"));
 
         $socket = socket_create(AF_UNIX, SOCK_STREAM, 0);
         $status = socket_connect($socket, $path);
@@ -43,5 +45,4 @@ class SocketConnector extends AbstractConnector
 
         return $socket;
     }
-
 }

@@ -18,9 +18,10 @@ class ClamAV
 
     public static function fromDSN(string $dsnParts): self
     {
-        $scheme = parse_url($dsnParts, PHP_URL_SCHEME);
+        $patchedDSNParts = str_replace(':///', '://', $dsnParts);
+        $scheme = parse_url($patchedDSNParts, PHP_URL_SCHEME);
 
-        return match($scheme) {
+        return match ($scheme) {
             "unix" => new self(new SocketConnector($dsnParts)),
             "tcp" => new self(new TcpConnector($dsnParts)),
             default => throw new InvalidArgumentException(sprintf('Unsupported scheme "%s"', $scheme)),
@@ -93,16 +94,20 @@ class ClamAV
 
     public function continueScan(string $path): array
     {
-        $return = [];
+        $infected = [];
 
         $scanResults = $this->connector->sendRecv('CONTSCAN ' . $path);
         $scanLines = explode("\n", trim($scanResults));
 
         foreach ($scanLines as $results) {
             [$file, $stats] = explode(':', $results);
-            $return[] = ['file' => $file, 'stats' => trim($stats)];
+            $stats = trim($stats);
+
+            if ('OK' !== $stats) {
+                $infected[] = $file;
+            }
         }
 
-        return $return;
+        return $infected;
     }
 }

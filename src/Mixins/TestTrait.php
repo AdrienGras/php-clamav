@@ -39,8 +39,7 @@ trait TestTrait
     {
         $result = self::$clamAV->continueScan("/var/www/clean.txt");
 
-        $this->assertNotEmpty($result);
-        $this->assertEquals($result[0]['stats'], 'OK');
+        $this->assertEmpty($result);
     }
     public function testContinueFolder(): void
     {
@@ -84,9 +83,10 @@ trait TestTrait
         $this->assertEquals(self::$clamAV->scanInStream($handle), false);
     }
 
-    public function testShutdown(): void
-    {
-        $this->assertTrue(str_starts_with(self::$clamAV->shutdown(), ''));
-    }
+
+    // public function testShutdown(): void
+    // {
+    //     $this->assertTrue(str_starts_with(self::$clamAV->shutdown(), ''));
+    // }
 
 }

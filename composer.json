@@ -1,6 +1,8 @@
 {
     "name": "adriengras/php-clamav",
     "description": "A PHP/Composer package to use ClamAV to scan folders and files for viruses",
+    "keywords": ["clamav", "antivirus", "virus", "scan", "php"],
+    "homepage": "https://github.com/AdrienGras/php-clamav",
     "type": "library",
     "require": {
         "ext-sockets": "*",

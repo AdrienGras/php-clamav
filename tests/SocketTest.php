@@ -15,7 +15,7 @@ class SocketTest extends TestCase
     {
         $socketPath = __DIR__ . "/../clamav/socket/clamd.sock";
         $socketRealPath = realpath($socketPath);
-        self::$clamAV = ClamAV::fromDSN('unix:/' . $socketRealPath);
+        self::$clamAV = ClamAV::fromDSN('unix://' . $socketRealPath);
     }
 
     public function testShutdown(): void

@@ -7,3 +7,5 @@ composer.phar
 
 /clamav
 /.phpunit*
+
+.secrets
