@@ -1,14 +1,17 @@
 # php-clamav
 
+![](https://img.shields.io/badge/php-%3E%3D8.0-blue?style=for-the-badge&logo=php)
+![](https://img.shields.io/badge/tests-passing-green?style=for-the-badge&logo=githubactions)
+
 This is a PHP client for the [ClamAV](https://www.clamav.net/) virus scanner.
 
 ## Features
 
-- Uses `clamd` for scanning.
-- Supports scanning of files and directories.
-- Supports scanning of streams.
-- Supports of TCP and Unix sockets.
-- Supports nearly all the methods provided by the `clamd` daemon. (e.g. `PING`, `VERSION`, `SCAN`, `CONTSCAN`, `INSTREAM`, `RELOAD`, `SHUTDOWN`)
+- 🛡️ Uses `clamd` for scanning.
+- 📂 Supports scanning of files and directories.
+- 🔌 Supports scanning of streams.
+- 🔗 Supports of TCP and Unix sockets.
+- ✨ Supports nearly all the methods provided by the `clamd` daemon. (e.g. `PING`, `VERSION`, `SCAN`, `CONTSCAN`, `INSTREAM`, `RELOAD`, `SHUTDOWN`)
 
 ## Requirements
 
@@ -16,7 +19,9 @@ This is a PHP client for the [ClamAV](https://www.clamav.net/) virus scanner.
 - PHP `8.0` or higher with the `sockets` extension enabled.
 
 > You can easily run a ClamAV `clamd` daemon using the official Docker image. More information can be found [here](https://docs.clamav.net/manual/Installing/Docker.html).
- 
+
+> ⚠️ This repository contains a `docker-compose.yml` file that you can use to run a ClamAV `clamd` daemon for testing purposes; but it is not recommended to use it in production.
+
 ## Installation
 
 You can install the package via composer:
@@ -78,5 +83,31 @@ $result = $client->continueScan('/path/to/directory');
 $client->shutdown();
 ```
 
+## Testing
 
+You can run the tests using the following commands:
 
+```bash
+docker compose up -d
+# wait until the clamav container is up (use docker compose logs clamav to check)
+./vendor/bin/phpunit
+```
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+## Security
+
+Please see [SECURITY](SECURITY.md) for details.
+
+## License
+
+This project is under MIT Licence. Please see [License File](LICENSE.md) for more information.
+
+## Credits
+
+This project is heavily inspired by :
+
+- The [appwrite/php-clamav](https://github.com/appwrite/php-clamav) package.
+- [@yani](https://github.com/yani) issue on the [appwrite/php-clamav](https://github.com/appwrite/php-clamav) repository.
