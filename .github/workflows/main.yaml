@@ -52,7 +52,8 @@ jobs:
         run: ls -als
 
       # run composer install
-      - uses: "ramsey/composer-install@v3"
+      - name: Install dependencies
+        run: cd $GITHUB_WORKSPACE && composer install
 
       # wait til clamav is ready
       - name: Wait for ClamAV
