@@ -1,0 +1,68 @@
+name: Build test
+
+# trigger on tags
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+permissions:
+  contents: write
+
+jobs:
+  # main job
+  unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: ["8.2"]
+
+    steps:
+      # checks out the repository
+      - name: Checkout
+        uses: actions/checkout@master
+
+      # install PHP
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          tools: composer:v2
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # set up directory structure
+      - name: Set up directory structure
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/clamav
+          mkdir -p $GITHUB_WORKSPACE/clamav/data
+          mkdir -p $GITHUB_WORKSPACE/clamav/files
+          mkdir -p $GITHUB_WORKSPACE/clamav/socket
+          echo "I am clean" > $GITHUB_WORKSPACE/clamav/files/clean.txt
+          echo "X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*" > $GITHUB_WORKSPACE/clamav/files/infected.com
+
+      # start containers
+      - name: Start containers
+        run: cd $GITHUB_WORKSPACE && docker compose -f "docker-compose.yml" up -d --build
+
+      # list current dir to see if the clamav folder exists
+      - name: List current directory
+        run: ls -als
+
+      # run composer install
+      - uses: "ramsey/composer-install@v3"
+
+      # wait til clamav is ready
+      - name: Wait for ClamAV
+        run: docker compose -f "docker-compose.yml" exec clamav sh -c "while ! nc -z localhost 3310; do sleep 1; done"
+
+      # run tests
+      - name: Run tests
+        run: cd $GITHUB_WORKSPACE && ./vendor/bin/phpunit
+
+      # stop containers
+      - name: Stop containers
+        if: always()
+        run: docker compose -f "docker-compose.yml" down
